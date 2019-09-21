@@ -3,9 +3,14 @@ var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
+const http = require('http')
 
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
+const imageRouter = require('./routes/imageRouter');
+
+const hostname = 'localhost';
+const port = 3000;
 
 var app = express();
 
@@ -19,8 +24,22 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
+//Mounting Routes
+app.use('/images', imageRouter);
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
+
+// app.use((req, res, next) => {
+//   res.statusCode = 200;
+//   res.setHeader('Content-Type', 'text/html');
+//   res.end('<html><body><h1> This is an Express Server</h1></body></html>');
+// });
+
+// const server = http.createServer(app);
+
+// server.listen(port, hostname, () => {
+//   console.log(`Server running at http://${hostname}:${port}/`);
+// });
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
