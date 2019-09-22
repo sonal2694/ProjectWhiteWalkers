@@ -1,8 +1,15 @@
 const express = require("express");
 const bodyParser = require("body-parser");
+var VisualRecognitionV3 = require('ibm-watson/visual-recognition/v3');
+var fs = require('fs');
 
 const imageRouter = express.Router();
 imageRouter.use(bodyParser.json());
+
+var visualRecognition = new VisualRecognitionV3({
+	version: '2018-03-19',
+	iam_apikey: 'u8TEC9oKvuDSLS6oRQ6GvGpjEH-aknxy1nl-w_TVoIwe'
+});
 
 imageRouter.route('/')
 .get((req, res, next) => {
@@ -13,14 +20,40 @@ imageRouter.route('/')
     var fileNamesJson = req.body;
     var keys = []
 
-    for (var i in fileNamesJson)
-        keys.push(i);
+    for (var key in fileNamesJson)
+        keys.push(key);
 
+    fileNames = []
     for (var i in keys) {
         var imageFileName = req.body[keys[i]];
-        console.log(imageFileName);
+        fileNames.push(imageFileName);
+
+        var images_file= fs.createReadStream('/Users/sonalsingh/MSCS/CornellBrh/ProjectWhiteWalkers/whiteWalkersExpressApp/pictures/'+imageFileName);
+        var classifier_ids = ["DetectIcyRoads_304399595"];
+        var threshold = 0.0;
+
+        var params = {
+            images_file: images_file,
+            classifier_ids: classifier_ids,
+            threshold: threshold
+        };
+
+        visualRecognition.classify(params, (err, response) => {
+            if (err) { 
+                console.log(err);
+            } else {
+                console.log(response);
+                console.log(JSON.stringify(response, null, 2))
+            }
+        });
+        res.end('Printing classification on Console');
+        // .then((response) => {
+        //     res.statusCode = 200;
+        //     res.setHeader('Content-Type', 'application/json');
+        //     res.json(response);
+            
+        // });
     }
-    res.end('Printing image names on Console');
 })
 .put((req, res, next) => {
     res.statusCode = 403;
