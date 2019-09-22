@@ -12,11 +12,17 @@ class ImageBox extends Component {
 
     render() {
         return (
-            <div className="ImageBox">
-                <img src={this.props.imageData.url} alt="picture" height="100" width="100"/>
+            <div className="ImageBox" style={styles.imageBox}>
+                <img src={this.props.imageData.url} alt="picture" height="300" width="300"/>
             </div>
         );
     }
 }
-    
+
+const styles={
+    imageBox: {
+        float: 'left',
+        margin: '5px'
+    }
+};
 export default ImageBox;
