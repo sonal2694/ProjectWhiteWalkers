@@ -44,7 +44,7 @@ const styles = {
 		width: '45vw',
 		float: 'left',
 		borderLeft: '3px solid #B3E5FC',
-		// height: '50vh',
+		height: '90vh',
 		padding: '5px',
 		paddingBottom: '200px',
 		

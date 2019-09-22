@@ -14,20 +14,14 @@ class App extends Component {
   constructor() {
     super();
     this.state = {
-      history: [{
-        "url": "https://i.ytimg.com/vi/J-HbAxA5QH0/maxresdefault.jpg",
-        "classification": "ice",
-      },
-      {
-        "url": "https://i.ytimg.com/vi/J-HbAxA5QH0/maxresdefault.jpg",
-        "classification": "no-ice",
-      }
+      history: [
       ],
-      currentImageValue: ""
+      currentImageValue: "",
+      shouldShowPopup: false
     };
     this.onClassifyBtnClicked = this.onClassifyBtnClicked.bind(this);
     this.onInputChange = this.onInputChange.bind(this);
-
+    this.onCloseBtnClicked = this.onCloseBtnClicked.bind(this);
   }
 
   onInputChange = (e) => {
@@ -50,16 +44,24 @@ class App extends Component {
       let currentHistory = self.state.history;
       currentHistory.unshift({
         "url": response.data.url,
-        "classification": response.data.class
+        "classification": response.data.class,
+        "hasPopupAlreadyBeenShown": false
       });
       self.setState({history: currentHistory});
+      self.setState({shouldShowPopup: true});
     })
     .catch(function (error) {
       console.log(error);
     });
   };
 
+  onCloseBtnClicked = (e) => {
+    this.setState({shouldShowPopup: false});
+  };
+
   render() {
+
+    let closeBtnStyle = Object.assign({}, styles.closeBtn, {display: this.state.shouldShowPopup ? 'block' : 'none'})
 
     const iceImages = []
     const noIceImages = []
@@ -69,7 +71,7 @@ class App extends Component {
       } else {
         noIceImages.push(this.state.history[key]);
       }
-		}
+    }
     
     return (
       <div className = "App" >
@@ -83,13 +85,14 @@ class App extends Component {
           <div style={styles.hint}>hint: use "https://m0.joe.ie/wp-content/uploads/2019/04/16173602/Trisk.jpg"</div>
         </div> 
         <History iceImages={iceImages} noIceImages={noIceImages}/>
-        {/* <Result msg={"The Road is safe!"} imageModel={{"url": "https://i.ytimg.com/vi/J-HbAxA5QH0/maxresdefault.jpg","classification": "no-ice"}}/> */}
+        <Result msg={"The Road is safe!"} imageModel={{"url": "https://i.ytimg.com/vi/J-HbAxA5QH0/maxresdefault.jpg","classification": "no-ice"}} display={this.state.shouldShowPopup}/>
+        <button type = "button" style = {closeBtnStyle} onClick = {(e) => this.onCloseBtnClicked(e)}>Close</button>
       </div>
       );
     }
   }
 
-  const styles = {
+  let styles = {
     topBar: {
       padding: "2%",
       paddingRight: 0,
@@ -129,6 +132,20 @@ class App extends Component {
     hint: {
       fontSize: '12px',
       marginTop: '5px'
+    },
+    closeBtn: {
+      position: 'absolute',
+      bottom: '15%',
+      width: '120px',
+      left: '46%',
+      cursor: 'pointer',
+      padding: '20px',
+      color: '#fff',
+      backgroundColor: '#009688',
+      borderRadius: '5px',
+      border: 0,
+      fontWeight: 800,
+      zIndex: 9999999999
     }
   };
 
