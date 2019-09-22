@@ -18,24 +18,22 @@ imageRouter.route('/')
     res.end('GET operation is not supported on /images');
 })
 .post((req, res, next) => {
-    var imageFileName = req.body.fileName;
-    var images_file= fs.createReadStream('/Users/sonalsingh/MSCS/CornellBrh/ProjectWhiteWalkers/whiteWalkersExpressApp/pictures/'+imageFileName);
-    var classifier_ids = ["COMEONMANx_10969308"];
+    var url = req.body.url;
+    var classifier_ids = ["DetectIcyRoads_483090348"];
     var threshold = 0.5;
 
     var params = {
-        images_file: images_file,
-        classifier_ids: classifier_ids,
-        threshold: threshold
+      url: url,
+      classifier_ids: classifier_ids,
+      threshold: threshold
     };
 
     visualRecognition.classify(params, (err, response) => {
         if (err) { 
             console.log(err);
         } else {
-            var name = response.images[0].image;
             var imageClassifier = response.images[0].classifiers[0].classes[0].class;
-            finalResponse["fileName"] = name;
+            finalResponse["url"] = url;
             finalResponse["class"] = imageClassifier;
 
             res.statusCode = 200;
