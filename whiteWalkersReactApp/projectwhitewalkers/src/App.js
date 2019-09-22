@@ -17,7 +17,8 @@ class App extends Component {
       history: [
       ],
       currentImageValue: "",
-      shouldShowPopup: false
+      shouldShowPopup: false,
+      currImageModel: {}
     };
     this.onClassifyBtnClicked = this.onClassifyBtnClicked.bind(this);
     this.onInputChange = this.onInputChange.bind(this);
@@ -47,8 +48,13 @@ class App extends Component {
         "classification": response.data.class,
         "hasPopupAlreadyBeenShown": false
       });
-      self.setState({history: currentHistory});
-      self.setState({shouldShowPopup: true});
+      self.setState({
+        history: currentHistory, 
+        shouldShowPopup: true, 
+        currImageModel: {
+        "url": response.data.url,
+        "classification": response.data.class}
+      });
     })
     .catch(function (error) {
       console.log(error);
@@ -56,7 +62,7 @@ class App extends Component {
   };
 
   onCloseBtnClicked = (e) => {
-    this.setState({shouldShowPopup: false});
+    this.setState({shouldShowPopup: false, currImageModel: {}});
   };
 
   render() {
@@ -85,7 +91,7 @@ class App extends Component {
           <div style={styles.hint}>hint: use "https://m0.joe.ie/wp-content/uploads/2019/04/16173602/Trisk.jpg"</div>
         </div> 
         <History iceImages={iceImages} noIceImages={noIceImages}/>
-        <Result msg={"The Road is safe!"} imageModel={{"url": "https://i.ytimg.com/vi/J-HbAxA5QH0/maxresdefault.jpg","classification": "no-ice"}} display={this.state.shouldShowPopup}/>
+        <Result msg={"The Road is safe!"} imageModel={this.state.currImageModel} display={this.state.shouldShowPopup}/>
         <button type = "button" style = {closeBtnStyle} onClick = {(e) => this.onCloseBtnClicked(e)}>Close</button>
       </div>
       );
