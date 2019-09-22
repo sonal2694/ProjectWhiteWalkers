@@ -19,10 +19,17 @@ class Result extends Component {
 		let innerBoxStyle = styles.resultInnerBox;
 		let outterBoxStyle = Object.assign({}, styles.resultBox, {display: this.props.display ? 'block' : 'none'})
 
+		let msg = "";
+		if (this.props.imageModel.classification == "Icy Roads") {
+			msg = "Road is not safe!";
+		} else {
+			msg = "Road is safe!";
+		}
+
         return (
             <div className="resultBox" style={outterBoxStyle}>
                 <div className="resultInnerBox" style={innerBoxStyle}>
-					<div style={styles.msg}>{this.props.msg}</div>
+					<div style={styles.msg}>{msg}</div>
 					<img src={this.props.imageModel.url} style={styles.img} alt="picture" height="300" width="300"/>
 				</div>
             </div>

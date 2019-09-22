@@ -72,7 +72,7 @@ class App extends Component {
     const iceImages = []
     const noIceImages = []
 		for (let key in this.state.history) {
-      if (this.state.history[key].classification == 'ice') {
+      if (this.state.history[key].classification == 'Icy Roads') {
         iceImages.push(this.state.history[key]);
       } else {
         noIceImages.push(this.state.history[key]);
@@ -91,7 +91,7 @@ class App extends Component {
           <div style={styles.hint}>hint: use "https://m0.joe.ie/wp-content/uploads/2019/04/16173602/Trisk.jpg"</div>
         </div> 
         <History iceImages={iceImages} noIceImages={noIceImages}/>
-        <Result msg={"The Road is safe!"} imageModel={this.state.currImageModel} display={this.state.shouldShowPopup}/>
+        <Result imageModel={this.state.currImageModel} display={this.state.shouldShowPopup}/>
         <button type = "button" style = {closeBtnStyle} onClick = {(e) => this.onCloseBtnClicked(e)}>Close</button>
       </div>
       );
